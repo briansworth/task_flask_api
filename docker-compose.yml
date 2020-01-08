@@ -1,0 +1,11 @@
+version: '3.3'
+services:
+  app:
+    image: briansworth/flask_api:ubuntu_xenial
+    build:
+      context: .
+    ports:
+      - 80:5000
+    environment:
+      - FLASK_APP
+
