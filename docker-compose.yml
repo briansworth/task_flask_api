@@ -4,8 +4,14 @@ services:
     image: briansworth/flask_api:ubuntu_xenial
     build:
       context: .
-    ports:
-      - 80:5000
     environment:
       - FLASK_APP
 
+  lb:
+    image: briansworth/lb
+    ports:
+      - 80:80
+    environment:
+      - PROXY_UPSTREAM
+    depends_on:
+      - app

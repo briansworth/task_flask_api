@@ -9,7 +9,7 @@ RUN apt-get update \
   && apt-get -y install python3-pip \
   && rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install flask
+RUN pip3 install flask && pip3 install flask_restful
 
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
