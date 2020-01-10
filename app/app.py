@@ -1,8 +1,12 @@
-from flask import Flask, jsonify, abort, make_response, request
+from flask import Flask, abort
 from flask_restful import Api, Resource, reqparse, fields, marshal
 
 app = Flask(__name__, static_url_path="")
 api = Api(app)
+
+settings = app.config.get('RESTFUL_JSON', {})
+settings.setdefault('indent', 2)
+app.config['RESTFUL_JSON'] = settings
 
 tasks = [
   {
@@ -23,8 +27,8 @@ task_fields = {
   'title': fields.String,
   'description': fields.String,
   'done': fields.Boolean,
-  'uri': fields.Url('task')
-  #'id': fields.Integer
+  'uri': fields.Url('task'),
+  'id': fields.Integer
 }
 
 class TaskListAPI(Resource):
@@ -78,6 +82,27 @@ class TaskAPI(Resource):
       abort(404)
 
     return {'task': [marshal(task[0], task_fields)][0]}
+
+  def put(self, id):
+    task = [task for task in tasks if task['id'] == id]
+    if len(task) == 0:
+      abort(404)
+    
+    task = task[0]
+    args = self.reqparse.parse_args()
+    for key, val in args.items():
+      if val is not None:
+        task[key] = val
+    
+    return {'task': [marshal(task, task_fields)][0]}
+
+  def delete(self, id):
+    task = [task for task in tasks if task['id'] == id]
+    if len(task) == 0:
+      abort(404)
+
+    tasks.remove(task[0])
+    return {}
 
 api.add_resource(TaskListAPI, '/api/v1/tasks', endpoint='tasks')
 api.add_resource(TaskAPI, '/api/v1/tasks/<int:id>', endpoint='task')

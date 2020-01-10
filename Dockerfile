@@ -1,18 +1,14 @@
-FROM ubuntu:xenial-20191212
+FROM alpine:3.10
 
 WORKDIR /app
 
 COPY ./app .
 
-RUN apt-get update \
-  && apt-get -y install python3 \
-  && apt-get -y install python3-pip \
-  && rm -rf /var/lib/apt/lists/*
-
-RUN pip3 install flask && pip3 install flask_restful
+RUN apk add --no-cache python3 libressl-dev py3-openssl \
+  && pip3 install flask flask_restful pyopenssl
 
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 ENV FLASK_APP=app
 
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD ["flask", "run", "--host=0.0.0.0", "--cert=adhoc"]
