@@ -56,6 +56,8 @@ class TaskListAPI(Resource):
 
   def post(self):
     args = self.reqparse.parse_args()
+    if args['title'] == 'teapot' and args['description'] == "I'm a teapot":
+      return {}, 418
     task = {
       'id': tasks[-1]['id'] + 1 if len(tasks) > 0 else 1,
       'title': args['title'],
@@ -102,7 +104,7 @@ class TaskAPI(Resource):
       abort(404)
 
     tasks.remove(task[0])
-    return {}
+    return {}, 204
 
 api.add_resource(TaskListAPI, '/api/v1/tasks', endpoint='tasks')
 api.add_resource(TaskAPI, '/api/v1/tasks/<int:id>', endpoint='task')
