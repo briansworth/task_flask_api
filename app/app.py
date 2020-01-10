@@ -1,3 +1,4 @@
+import os
 from flask import Flask, abort
 from flask_restful import Api, Resource, reqparse, fields, marshal
 
@@ -52,7 +53,10 @@ class TaskListAPI(Resource):
     super(TaskListAPI, self).__init__()
 
   def get(self):
-    return {'tasks': [marshal(task, task_fields) for task in tasks]}
+    comp_name = os.uname()[1]
+    return {'tasks': [marshal(task, task_fields) for task in tasks]}, \
+      200, \
+      {'X-Upstream-Hostname': comp_name}
 
   def post(self):
     args = self.reqparse.parse_args()
