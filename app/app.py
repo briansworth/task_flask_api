@@ -69,7 +69,7 @@ class TaskListAPI(Resource):
       'done': False
     }
     tasks.append(task)
-    return {'task': [marshal(task, task_fields)]}, 201
+    return {'task': [marshal(task, task_fields)][0]}, 201
 
 class TaskAPI(Resource):
   def __init__(self):
