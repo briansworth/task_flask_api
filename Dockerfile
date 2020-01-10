@@ -11,4 +11,5 @@ ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 ENV FLASK_APP=app
 
-CMD ["flask", "run", "--host=0.0.0.0", "--cert=adhoc"]
+ENTRYPOINT ["flask", "run", "--host=0.0.0.0"]
+#CMD ["--cert=adhoc"]
