@@ -1,17 +1,18 @@
 version: '3.3'
 services:
   app:
-    image: briansworth/flask_api:ubuntu_xenial
+    image: briansworth/flask_api:alpine
     build:
       context: .
     environment:
       - FLASK_APP
+      - FLASK_ENV=development
 
   lb:
     image: briansworth/lb
     ports:
       - 80:80
     environment:
-      - PROXY_UPSTREAM
+      - PROXY_UPSTREAM=app:5000
     depends_on:
       - app
